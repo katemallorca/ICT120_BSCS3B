@@ -1,0 +1,70 @@
+# Importing modules
+
+import re
+from nltk.corpus import wordnet
+import nltk
+nltk.download('wordnet')
+
+# Building a list of Keywords
+ 
+list_words=['decision','contact','close']
+list_syn={}
+for word in list_words:
+    synonyms=[]
+    for syn in wordnet.synsets(word):
+        for lem in syn.lemmas():
+            
+            # Remove any special characters from synonym strings
+            lem_name = re.sub('[^a-zA-Z0-9 \n\.]', ' ', lem.name())
+            synonyms.append(lem_name)
+   
+    list_syn[word]=set(synonyms)
+    
+print (list_syn)
+
+list_words=['decision','contact','close']
+list_syn={}
+for word in list_words:
+    synonyms=[]
+    for syn in wordnet.synsets(word):
+        for lem in syn.lemmas():
+            
+            # Remove any special characters from synonym strings
+            lem_name = re.sub('[^a-zA-Z0-9 \n\.]', ' ', lem.name())
+            synonyms.append(lem_name)
+   
+    list_syn[word]=set(synonyms)
+    
+print (list_syn)
+
+#KATE S. MALLORCA II BSCS 3B
+# Building dictionary of Intents & Keywords
+keywords={}
+keywords_dict={}
+ 
+# Defining a new key in the keywords dictionary
+keywords['decision']=[]
+ 
+# Populating the values in the keywords dictionary with synonyms of keywords formatted with RegEx metacharacters 
+for synonym in list(list_syn['decision']):
+    keywords['decision'].append('.*\\b'+synonym+'\\b.*')
+
+# Defining a new key in the keywords dictionary
+keywords['close']=[]
+ 
+# Populating the values in the keywords dictionary with synonyms of keywords formatted with RegEx metacharacters 
+for synonym in list(list_syn['close']):
+    keywords['close'].append('.*\\b'+synonym+'\\b.*')
+ 
+# Defining a new key in the keywords dictionary
+keywords['contact']=[]
+ 
+# Populating the values in the keywords dictionary with synonyms of keywords formatted with RegEx metacharacters 
+for synonym in list(list_syn['contact']):
+    keywords['contact'].append('.*\\b'+synonym+'\\b.*')
+ 
+for intent, keys in keywords.items():
+    
+    # Joining the values in the keywords dictionary with the OR (|) operator updating them in keywords_dict dictionary
+    keywords_dict[intent]=re.compile('|'.join(keys))
+print (keywords_dict)
